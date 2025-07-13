@@ -1,11 +1,41 @@
-import React from 'react'
-import MenuList from './menu-list'
+import React, { useState } from "react";
+import MenuList from "./menu-list";
+import { FaMinus, FaPlus } from "react-icons/fa";
 
+const MenuItem = ({ item }) => {
+  const [displayCurrentChildren, setDisplayCurrentChildren] = useState({});
 
-const MenuItem = ({item}) => {
+  const handleToggleChildren = (getCurrentlabel) => {
+    setDisplayCurrentChildren({
+      ...displayCurrentChildren,
+      [getCurrentlabel]: !displayCurrentChildren[getCurrentlabel],
+    });
+  };
+  console.log(displayCurrentChildren);
+
   return (
-    <div>Menu item</div>
-  )
-}
+    <li>
+      <div className="menu-item">
+        <p>{item.label}</p>
+        {item && item.children && item.children.length ? (
+          <span onClick={() => handleToggleChildren(item.label)}>
+            {displayCurrentChildren[item.label] ? (
+              <FaMinus color="#fff" size={25} />
+            ) : (
+              <FaPlus color="#fff" size={25} />
+            )}
+          </span>
+        ) : null}
+      </div>
 
-export default MenuItem
+      {item &&
+      item.children &&
+      item.children.length > 0 &&
+      displayCurrentChildren[item.label] ? (
+        <MenuList list={item.children} />
+      ) : null}
+    </li>
+  );
+};
+
+export default MenuItem;
